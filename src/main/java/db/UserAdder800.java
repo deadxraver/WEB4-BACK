@@ -46,4 +46,14 @@ public class UserAdder800 {
 		}
 	}
 
+	public void deleteUser(User user) {
+		try {
+			getEntityManager().getTransaction().begin();
+			getEntityManager().remove(getEntityManager().merge(user));
+			getEntityManager().getTransaction().commit();
+		} finally {
+			getEntityManager().close();
+		}
+	}
+
 }
