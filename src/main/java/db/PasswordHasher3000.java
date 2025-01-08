@@ -6,7 +6,6 @@ public class PasswordHasher3000 {
 
 	public static String hash(String login, String password) {
 		String salt = saltFromLogin(login);
-		System.out.println("salt = " + salt);
 		return new String(BCrypt.with(BCrypt.Version.VERSION_2Y).hash(BCrypt.MIN_COST, salt.getBytes(), password.getBytes()));
 	}
 

@@ -45,7 +45,6 @@ public class AuthResource {
 			return Response.status(Response.Status.FORBIDDEN).entity("Wrong password").build();
 		}
 		System.out.println("user " + login + " logged in");
-		System.out.println("dots as json: " + user.getDotsAsJSON());
 		return Response.status(Response.Status.OK).entity(user.getDotsAsJSON()).build();
 	}
 
