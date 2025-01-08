@@ -3,7 +3,6 @@ package datamodels;
 import db.DBManager;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
