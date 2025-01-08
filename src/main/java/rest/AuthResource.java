@@ -54,15 +54,12 @@ public class AuthResource {
 	@Path("/remove")
 	public Response remove(@QueryParam("login") String login, @QueryParam("password") String password) {
 		User user = UserAdder800.findByUsername(login);
-		if (user == null) {
-			System.err.println("user " + login + " not found");
-			return Response.status(Response.Status.OK).entity("User not found").build();
-		} else if (!user.getHashedPassword().equals(PasswordHasher3000.hash(login, password))) {
-			System.err.println("wrong password for user " + login);
-			return Response.status(Response.Status.OK).entity("Wrong password").build();
+		if (user == null || !user.getHashedPassword().equals(PasswordHasher3000.hash(login, password))) {
+			System.err.println("user " + login + " not found or password is incorrect");
+			return Response.status(Response.Status.FORBIDDEN).entity("User not found").build();
 		}
 		UserAdder800.deleteUser(user);
 		System.out.println("user " + login + " deleted");
-		return Response.status(Response.Status.OK).entity("Deleted").build();
+		return Response.status(Response.Status.OK).build();
 	}
 }
