@@ -26,7 +26,7 @@ public class MainResource {
 						   @QueryParam("x") Double x, @QueryParam("y") Double y, @QueryParam("r") Double r) {
 		long startTime = System.currentTimeMillis();
 		User user = UserAdder800.findByUsername(login);
-		if (user == null || !user.getHashedPassword().equals(PasswordHasher3000.hash(login, password))){
+		if (user == null || !PasswordHasher3000.verify(password, user.getHashedPassword())) {
 			System.err.println("user " + login + " not found or password is incorrect");
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -48,7 +48,7 @@ public class MainResource {
 	@Path("/clear")
 	public Response clear(@QueryParam("login") String login, @QueryParam("password") String password) {
 		User user = UserAdder800.findByUsername(login);
-		if (user == null || !user.getHashedPassword().equals(PasswordHasher3000.hash(login, password))) {
+		if (user == null || !PasswordHasher3000.verify(password, user.getHashedPassword())) {
 			System.err.println("user " + login + " not found or password is incorrect");
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
