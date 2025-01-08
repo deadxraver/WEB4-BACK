@@ -1,59 +1,35 @@
 package db;
 
+import datamodels.User;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
 public class UserAdder800 {
-	private final EntityManagerFactory entityManagerFactory;
-	EntityManager em;
 
-
-	public UserAdder800() {
-		this.entityManagerFactory = Persistence.createEntityManagerFactory("Users");
-		this.em = entityManagerFactory.createEntityManager();
+	public static User findByUsername(String username) {
+		String query = "SELECT u FROM User u WHERE u.login = :username";
+		TypedQuery<User> typedQuery = DBManager.getEntityManager().createQuery(query, User.class);
+		typedQuery.setParameter("username", username);
+		return typedQuery.getResultStream().findFirst().orElse(null);
 	}
 
-	public EntityManager getEntityManager() {
-		if (em == null || !em.isOpen()) {
-			em = entityManagerFactory.createEntityManager();
-		}
-		return em;
-	}
-
-	public User findByUsername(String username) {
+	public static void saveUser(User user) {
+		EntityManager em = DBManager.getEntityManager();
 		try {
-			String query = "SELECT u FROM User u WHERE u.login = :username";
-			TypedQuery<User> typedQuery = getEntityManager().createQuery(query, User.class);
-			typedQuery.setParameter("username", username);
-			return typedQuery.getResultStream().findFirst().orElse(null);
-		} finally {
-			getEntityManager().close();
-		}
-	}
-
-	public void saveUser(User user) {
-		try {
-			getEntityManager().getTransaction().begin();
-			getEntityManager().persist(user);
-			getEntityManager().getTransaction().commit();
+			em.getTransaction().begin();
+			em.persist(user);
+			em.getTransaction().commit();
 		} catch (Exception e) {
-			getEntityManager().getTransaction().rollback();
+			em.getTransaction().rollback();
 			System.err.println(e.getMessage());
-		} finally {
-			getEntityManager().close();
 		}
 	}
 
-	public void deleteUser(User user) {
-		try {
-			getEntityManager().getTransaction().begin();
-			getEntityManager().remove(getEntityManager().merge(user));
-			getEntityManager().getTransaction().commit();
-		} finally {
-			getEntityManager().close();
-		}
+	public static void deleteUser(User user) {
+		EntityManager em = DBManager.getEntityManager();
+		em.getTransaction().begin();
+		em.remove(DBManager.getEntityManager().merge(user));
+		em.getTransaction().commit();
 	}
 
 }
