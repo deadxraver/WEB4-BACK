@@ -13,15 +13,17 @@ public class UserAdder800 {
 		return typedQuery.getResultStream().findFirst().orElse(null);
 	}
 
-	public static void saveUser(User user) {
+	public static boolean saveUser(User user) {
 		EntityManager em = DBManager.getEntityManager();
 		try {
 			em.getTransaction().begin();
 			em.persist(user);
 			em.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			em.getTransaction().rollback();
 			System.err.println(e.getMessage());
+			return false;
 		}
 	}
 
