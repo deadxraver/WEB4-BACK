@@ -22,17 +22,24 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Dot> dots;
 
-	public List<DotDTO> getDTODots() {
-		List<DotDTO> dtoDots = new ArrayList<>();
-		dots.forEach((item) -> {
-			dtoDots.add(new DotDTO(item));
-		});
-		return dtoDots;
+	public String getDotsAsJSON() {
+		StringBuilder sb = new StringBuilder("[");
+		dots.forEach((item) -> sb.append(item.toString()));
+		sb.append("]");
+		return sb.toString().replaceAll("}\\{", "}, {");
 	}
 
 	public void addDot(Dot dot) {
 		this.dots.add(dot);
 		dot.setUser(this);
+		DBManager.getEntityManager().getTransaction().begin();
+		DBManager.getEntityManager().merge(this);
+		DBManager.getEntityManager().flush();
+		DBManager.getEntityManager().getTransaction().commit();
+	}
+
+	public void clearDots() {
+		this.dots.clear();
 		DBManager.getEntityManager().getTransaction().begin();
 		DBManager.getEntityManager().merge(this);
 		DBManager.getEntityManager().flush();

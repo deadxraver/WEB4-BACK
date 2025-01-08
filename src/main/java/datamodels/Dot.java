@@ -11,10 +11,6 @@ public class Dot {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-//	@ManyToOne
-//	@JoinColumn(name ="owner")
-//	private User owner;
-
 	@Column(name = "x", nullable = false)
 	private Double x;
 
@@ -24,10 +20,13 @@ public class Dot {
 	@Column(name = "r", nullable = false)
 	private Double r;
 
-	@Column(name = "exec_time")
+	@Column(name = "hit", nullable = false)
+	private boolean hit;
+
+	@Column(name = "exec_time", nullable = false)
 	private Long execTime;
 
-	@Column(name = "cur_time")
+	@Column(name = "cur_time", nullable = false)
 	private LocalDateTime curTime;
 
 	@ManyToOne
@@ -90,10 +89,18 @@ public class Dot {
 		this.user = user;
 	}
 
+	public boolean getHit() {
+		return hit;
+	}
+
+	public void setHit(boolean hit) {
+		this.hit = hit;
+	}
+
 	@Override
 	public String toString() {
-		return "{ x: %f, y: %f, r: %f, execTime: %d, curTime: %s }".formatted(
-				this.x, this.y, this.r, this.execTime, this.curTime.toString()
+		return "{ \"x\": %f, \"y\": %f, \"r\": %f, \"hit\": %b, \"execTime\": %d, \"curTime\": \"%s\" }".formatted(
+				this.x, this.y, this.r, this.hit, this.execTime, this.curTime.toString()
 		);
 	}
 }

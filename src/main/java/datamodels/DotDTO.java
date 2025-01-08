@@ -1,13 +1,13 @@
 package datamodels;
 
 import java.time.LocalDateTime;
-import java.util.LongSummaryStatistics;
 
 public class DotDTO {
 
-	private Double x, y, r;
-	private Long execTime;
-	private LocalDateTime curTime;
+	private final Double x, y, r;
+	private final Long execTime;
+	private final LocalDateTime curTime;
+	private final boolean hit;
 
 	public DotDTO(Dot dot) {
 		this.x = dot.getX();
@@ -15,6 +15,7 @@ public class DotDTO {
 		this.r = dot.getR();
 		this.execTime = dot.getExecTime();
 		this.curTime = dot.getCurTime();
+		this.hit = dot.getHit();
 	}
 
 	public Double getX() {
@@ -37,10 +38,14 @@ public class DotDTO {
 		return curTime;
 	}
 
+	public boolean isHit() {
+		return hit;
+	}
+
 	@Override
 	public String toString() {
-		return "{ x: %f, y: %f, r: %f, execTime: %d, curTime: %s }".formatted(
-				this.x, this.y, this.r, this.execTime, this.curTime.toString()
+		return "{ x: %f, y: %f, r: %f, hit: %b, execTime: %d, curTime: %s }".formatted(
+				this.x, this.y, this.r, this.hit, this.execTime, this.curTime.toString()
 		);
 	}
 }
