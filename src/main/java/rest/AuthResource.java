@@ -7,8 +7,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
-
 @Path("/auth")
 public class AuthResource {
 
@@ -20,13 +18,12 @@ public class AuthResource {
 		User user = new User();
 		user.setLogin(login);
 		user.setHashedPassword(PasswordHasher3000.hash(password));
-		user.setDots(new ArrayList<>());
 		if (UserAdder800.findByUsername(login) != null) {
 			System.err.println("user " + login + " already exists");
 			return Response.status(Response.Status.CONFLICT).entity("Username already exists").build();
 		}
 		UserAdder800.saveUser(user);
-		System.out.println("saved user: " + user);
+		System.out.println("saved user: " + login);
 		return Response.status(Response.Status.OK).entity("Registered").build();
 	}
 
