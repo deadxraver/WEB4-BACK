@@ -13,6 +13,14 @@ public class UserAdder800 {
 		return typedQuery.getResultStream().findFirst().orElse(null);
 	}
 
+	public static User[] findAllUsers() {
+		EntityManager em = DBManager.getEntityManager();
+		em.getTransaction().begin();
+		TypedQuery<User> typedQuery = em.createQuery("SELECT u FROM User u", User.class);
+		em.getTransaction().commit();
+		return typedQuery.getResultList().toArray(new User[0]);
+	}
+
 	public static boolean saveUser(User user) {
 		EntityManager em = DBManager.getEntityManager();
 		try {
@@ -28,10 +36,12 @@ public class UserAdder800 {
 	}
 
 	public static void deleteUser(User user) {
-		EntityManager em = DBManager.getEntityManager();
-		em.getTransaction().begin();
-		em.remove(DBManager.getEntityManager().merge(user));
-		em.getTransaction().commit();
+		try {
+			EntityManager em = DBManager.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(DBManager.getEntityManager().merge(user));
+			em.getTransaction().commit();
+		} catch (Exception ignored) {}
 	}
 
 }

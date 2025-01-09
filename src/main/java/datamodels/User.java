@@ -76,4 +76,9 @@ public class User {
 	public void setDots(List<Dot> dots) {
 		this.dots = dots;
 	}
+
+	@Override
+	public String toString() {
+		return "{ \"id\": %d, \"login\": \"%s\" }".formatted(this.id, this.login);
+	}
 }
