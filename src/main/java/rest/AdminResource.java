@@ -50,7 +50,7 @@ public class AdminResource {
 				return Response.status(Response.Status.EXPECTATION_FAILED).build();
 			}
 			UserAdder800.deleteUser(user);
-			return Response.ok(user).build();
+			return Response.ok().build();
 		} else {
 			System.err.println("admin username or password incorrect");
 			return Response.status(Response.Status.UNAUTHORIZED).build();
